@@ -1,0 +1,7 @@
+config.local.sh
+staging/
+*.log
+*.lock
+__pycache__/
+*.pyc
+.env
