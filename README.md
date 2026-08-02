@@ -1,5 +1,7 @@
 # Autonomie-OS
 
+[![Part of AgentStack](https://img.shields.io/badge/Part%20of-AgentStack-blue?style=flat-square)](https://github.com/FvdHMBAI/agent-stack)
+
 **The self-improving AI agent framework.**
 
 Most AI frameworks help agents *do things*. Autonomie-OS helps agents *become better at doing things*.
