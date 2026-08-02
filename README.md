@@ -1,195 +1,258 @@
 # Autonomie-OS
 
-**Self-improving AI agent framework: dreaming, learning loops, nightly brain maintenance, and evaluation regression testing.**
+**The self-improving AI agent framework.**
 
-Autonomie-OS is a production-tested framework that makes AI agents learn from their own sessions. Instead of repeating the same mistakes, your agents dream about what happened, extract lessons, fill knowledge gaps, and propose their own improvements.
+Most AI frameworks help agents *do things*. Autonomie-OS helps agents *become better at doing things*.
+
+It runs overnight, analyzes your agent's sessions, extracts what worked and what didn't, fills knowledge gaps, detects regressions, and proposes its own improvements — all without human intervention.
+
+[![CI](https://github.com/FvdHMBAI/autonomie-os/actions/workflows/ci.yml/badge.svg)](https://github.com/FvdHMBAI/autonomie-os/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+---
+
+## Why Autonomie-OS?
+
+| Framework | What it does | What it doesn't |
+|-----------|-------------|-----------------|
+| **AutoGPT** | Executes tasks autonomously | Doesn't learn from its mistakes |
+| **LangChain** | Chains LLM calls into workflows | No self-improvement loop |
+| **Devin** | AI software engineer ($500/mo) | Closed source, cloud-only |
+| **Autonomie-OS** | **Learns from every session, improves overnight, runs on your hardware** | — |
+
+The difference between a tool and an organism is that an organism adapts.
+
+---
+
+## Architecture
 
 ```
-                          AUTONOMIE-OS ARCHITECTURE
-    
-    +------------------+     +------------------+     +------------------+
-    |    DREAMING       |     |    LEARNING       |     |      BRAIN       |
-    |                   |     |                   |     |                  |
-    | Session Analysis  |     | Learning Loop     |     | Nightly Brain    |
-    | Pattern Detection |---->| Session Learner   |---->| RAG Filler       |
-    | Playbook Writing  |     | Consolidator      |     | Synapse Builder  |
-    | Skill Proposals   |     | Learning Apply    |     | Drift Check      |
-    +--------+----------+     +--------+----------+     +--------+---------+
-             |                         |                         |
-             v                         v                         v
-    +--------+-------------------------+-------------------------+----------+
-    |                           PostgreSQL                                  |
-    |  learning_items | error_patterns | rag_misses | dreaming_runs | ...   |
-    +--------+-------------------------+-------------------------+----------+
-             |                         |                         |
-             v                         v                         v
-    +------------------+     +------------------+     +------------------+
-    |      EVAL         |     |     SKILLS        |     |  CHAIN RUNNER    |
-    |                   |     |                   |     |                  |
-    | Regression Check  |     | Auto-Improve      |     | Multi-Phase      |
-    | Drift Detection   |     | Reflect Loop      |     | Verification     |
-    |                   |     | Crystallization   |     | Budget Control   |
-    +------------------+     +------------------+     +------------------+
-             |                         |                         |
-             +------------+------------+------------+------------+
-                          |                         |
-                          v                         v
-                  +---------------+         +---------------+
-                  | Vault / Docs  |         | Notifications |
-                  | (Obsidian,    |         | (ntfy, email, |
-                  |  Markdown)    |         |  webhooks)    |
-                  +---------------+         +---------------+
+                          AUTONOMIE-OS
+    ┌─────────────────────────────────────────────────────────┐
+    │                    ORCHESTRATOR                          │
+    │   Runs modules in dependency order (cron / manual)      │
+    └──────┬──────────┬──────────┬──────────┬────────┬────────┘
+           │          │          │          │        │
+    ┌──────▼──────┐ ┌─▼────────┐ ┌▼────────┐ ┌─────▼──┐ ┌────▼─────┐
+    │  DREAMING   │ │ LEARNING │ │  BRAIN  │ │  EVAL  │ │  SKILLS  │
+    │             │ │          │ │         │ │        │ │          │
+    │ Session     │ │ Loop     │ │ Nightly │ │ Regr.  │ │ Auto-    │
+    │ Analysis    │ │ Session  │ │ RAG     │ │ Check  │ │ Improve  │
+    │ Pattern     │ │ Learner  │ │ Filler  │ │ Drift  │ │ Reflect  │
+    │ Detection   │ │ Consoli- │ │ Synapse │ │ Check  │ │ Loop     │
+    │ Playbook    │ │ dator    │ │ Builder │ │        │ │ Crystal- │
+    │ Writing     │ │ Apply    │ │         │ │        │ │ lization │
+    └──────┬──────┘ └─┬────────┘ └┬────────┘ └───┬────┘ └────┬─────┘
+           │          │           │              │           │
+    ┌──────▼──────────▼───────────▼──────────────▼───────────▼──────┐
+    │                        PostgreSQL                             │
+    │  learning_items │ error_patterns │ rag_misses │ dreaming_runs │
+    │  skill_proposals │ skill_decisions │ skill_metrics             │
+    └──────┬──────────────────────┬─────────────────────────────────┘
+           │                     │
+    ┌──────▼──────┐       ┌──────▼──────┐       ┌──────────────┐
+    │ Vault/Docs  │       │ Notify      │       │ CHAIN RUNNER │
+    │ (Obsidian,  │       │ (ntfy.sh,   │       │ Multi-phase  │
+    │  Markdown)  │       │  webhooks)  │       │ autonomous   │
+    └─────────────┘       └─────────────┘       │ task runner  │
+                                                └──────────────┘
 ```
 
-## What Does It Do?
+## Modules
 
-| Module | Purpose | Frequency |
-|--------|---------|-----------|
-| **Dreaming** | Analyzes daily sessions, detects recurring patterns, writes playbooks, proposes skill improvements | Nightly |
-| **Learning** | Converts RAG misses and error patterns into learning items, deduplicates, classifies, archives noise | Daily |
-| **Brain** | Prioritizes learnings, fills knowledge gaps with stubs, builds cross-links between documents, checks documentation drift | Nightly |
-| **Eval** | Detects regressions (same bug fixed twice), measures documentation drift deterministically | Daily |
-| **Skills** | Analyzes error patterns to suggest skill improvements, tracks crystallization candidates | Weekly |
-| **Chain Runner** | Executes multi-phase tasks autonomously with verification gates, budget limits, and automatic retries | On demand |
+### Dreaming — *"What happened today?"*
 
-## Quick Start
+Runs nightly. Analyzes session logs, detects recurring patterns, writes playbooks for common problems, and proposes new skills when the same pattern occurs 5+ times.
 
-```bash
-# 1. Clone
-git clone https://github.com/FvdHMBAI/autonomie-os.git
-cd autonomie-os
+**Input:** Session logs, error patterns, RAG misses, git activity
+**Output:** Playbooks, applied learnings, skill proposals, vault stubs
 
-# 2. Configure
-cp config.sh config.local.sh
-# Edit config.local.sh: set VAULT_DIR, database connection, API keys
-
-# 3. Install (creates DB schema, directories, cron jobs)
-./install.sh
-
-# 4. Test a nightly run
-./orchestrator.sh --nightly
-
-# 5. Check results
-cat ~/vault/autonomie/dreaming/$(date +%Y-%m-%d).md
-tail -f /var/log/autonomie/orchestrator.log
-```
-
-## Prerequisites
-
-- **PostgreSQL** (any version >= 12)
-- **bash** >= 4.0
-- **jq**, **curl**, **bc** (standard CLI tools)
-- **LLM Provider** (one of):
-  - Anthropic Claude API key (recommended for best quality)
-  - Local Ollama instance (free, runs on CPU)
-
-## Configuration
-
-Copy `config.sh` to `config.local.sh` and adjust:
-
-```bash
-# Required
-VAULT_DIR="$HOME/vault"              # Your knowledge base directory
-DB_CONTAINER="my-postgres"           # Docker container name (or use DB_HOST)
-DB_NAME="autonomie"                  # Database name
-
-# LLM (at least one)
-ANTHROPIC_API_KEY="sk-ant-..."       # Claude API key
-OLLAMA_URL="http://localhost:11434"  # Local Ollama
-
-# Optional
-NTFY_URL="https://ntfy.sh/my-topic" # Push notifications
-MONITORED_REPOS="/path/to/app1,/path/to/app2"  # For git analysis
-RAG_INDEX_CMD="node /path/to/build-index.js"    # RAG reindexing
-RAG_SEARCH_CMD="node /path/to/search.js"        # RAG search
-```
-
-## Module Details
-
-### Dreaming (Session Analysis)
-
-Runs after each day to analyze what happened:
-
-1. **Collects** session logs, unapplied learnings, recurring errors, RAG misses, git activity
-2. **Triages** all data through an LLM to identify playbook candidates, applicable learnings, patterns, and knowledge gaps
-3. **Creates** playbooks for recurring problems, marks learnings as applied, updates error patterns with root causes
-4. **Proposes** new skills for patterns that occur 5+ times
-5. **Reports** everything in a structured markdown report
-
-### Learning (Continuous Improvement)
+### Learning — *"What should we remember?"*
 
 A four-stage pipeline that turns raw signals into actionable improvements:
 
-1. **Learning Loop**: Converts RAG misses and high-frequency errors into learning items
-2. **Session Learner**: Extracts key findings from session logs
-3. **Consolidator**: Clusters by topic, deduplicates, generates category reports
-4. **Learning Apply**: LLM classifies items as guard/memory/vault/config/skip, archives noise
+1. **Learning Loop** — Converts RAG misses and high-frequency errors into learning items
+2. **Session Learner** — Extracts key findings from session logs
+3. **Consolidator** — Clusters by topic, deduplicates, generates reports
+4. **Learning Apply** — LLM classifies items as guard/memory/vault/config/skip, archives noise
 
-### Brain (Knowledge Maintenance)
+### Brain — *"What's missing from our knowledge?"*
 
-Active knowledge base maintenance that goes beyond passive logging:
+Active knowledge base maintenance:
 
-1. **Nightly Brain**: Prioritizes top-5 learnings, analyzes RAG gaps, finds cross-domain patterns, generates creative ideas
-2. **RAG Filler**: Creates documentation stubs for frequently missed search queries
-3. **Synapse Builder**: Discovers and links thematically related documents using embedding similarity
+- **Nightly Brain** — Prioritizes top-5 learnings, finds cross-domain patterns, generates creative ideas
+- **RAG Filler** — Creates documentation stubs for frequently missed search queries
+- **Synapse Builder** — Links thematically related documents using embedding similarity
 
-### Eval (Quality Assurance)
+### Eval — *"Did we break something?"*
 
 Automated quality checks:
 
-1. **Regression Detection**: When a new bugfix targets the same repo and symptoms as an older fix, flags the older fix as "partial" (likely regression)
-2. **Drift Check**: Deterministic measurement of undocumented API routes and database tables across all monitored repos
+- **Regression Detection** — Flags when a new bugfix targets the same repo and symptoms as an older fix
+- **Drift Check** — Deterministic measurement of undocumented API routes and database tables (Python)
 
-### Skills (Self-Optimization)
+### Skills — *"How can we get better?"*
 
-The system optimizes its own skills:
+Self-optimization:
 
-1. **Skill Auto-Improve**: Collects error patterns, runs LLM triage, stages improvement proposals
-2. **Reflect Loop**: Scans skill learnings for crystallization candidates (high score + many runs)
+- **Skill Auto-Improve** — Collects error patterns, runs LLM triage, stages improvement proposals
+- **Reflect Loop** — Scans learnings for crystallization candidates (Score >= 4 AND Runs >= 3)
 
-### Chain Runner (Autonomous Execution)
+### Chain Runner — *Autonomous multi-phase execution*
 
-Multi-phase task runner for complex work:
+Runs complex tasks with safety:
 
-- Parses task definitions with phases from markdown files
+- Parses markdown task definitions with phases
 - Runs each phase in a fresh AI agent session
-- Verification gates between phases (TypeScript, build, tests, git status)
+- Verification gates between phases (TypeScript, build, tests)
 - Budget and time limits with automatic stop
 - Retry on gate failure
-- Full audit trail in vault
+- Full audit trail
 
-## How It All Fits Together
+---
+
+## Quick Start
+
+### Prerequisites
+
+- **PostgreSQL** >= 12
+- **bash** >= 4.0
+- **jq**, **curl**, **bc**
+- One LLM provider:
+  - [Anthropic Claude](https://console.anthropic.com/) API key (recommended), or
+  - [Ollama](https://ollama.ai/) running locally (free)
+
+### Install
+
+```bash
+git clone https://github.com/FvdHMBAI/autonomie-os.git
+cd autonomie-os
+
+# Configure
+cp config.sh config.local.sh
+vim config.local.sh  # Set VAULT_DIR, database, LLM provider
+
+# Install (creates DB schema, directories, suggests cron jobs)
+./install.sh
+
+# Verify
+./orchestrator.sh --module dreaming
+tail -f /var/log/autonomie/dreaming.log
+```
+
+### Cron Schedule
+
+```cron
+# Nightly: dreaming + brain + eval (recommended: 02:00)
+0 2 * * * /path/to/autonomie-os/orchestrator.sh --nightly
+
+# Weekly: deep analysis + synapse + skills (recommended: Sunday 08:00)
+0 8 * * 0 /path/to/autonomie-os/orchestrator.sh --weekly
+```
+
+### First Dreaming Session
+
+After a day of AI agent sessions:
+
+```bash
+./orchestrator.sh --nightly
+
+# Check what happened
+cat ~/vault/autonomie/dreaming/$(date +%Y-%m-%d).md
+```
+
+See [examples/first-dreaming-session.md](examples/first-dreaming-session.md) for sample output.
+
+---
+
+## Configuration Reference
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `VAULT_DIR` | `~/vault` | Knowledge base directory (Obsidian, Markdown) |
+| `DB_CONTAINER` | — | Docker container name for PostgreSQL |
+| `DB_NAME` | `autonomie` | Database name |
+| `ANTHROPIC_API_KEY` | — | Claude API key (primary LLM) |
+| `OLLAMA_URL` | `http://localhost:11434` | Ollama endpoint (fallback LLM) |
+| `OLLAMA_MODEL` | `qwen3:8b` | Local model for analysis |
+| `NTFY_URL` | — | Push notification endpoint |
+| `MONITORED_REPOS` | — | Comma-separated repo paths for git analysis |
+| `RAG_INDEX_CMD` | — | Command to rebuild RAG index |
+| `RAG_SEARCH_CMD` | — | Command to search RAG index |
+| `MAX_COST_PER_RUN` | `2.00` | Max API cost per orchestrator run (USD) |
+| `MAX_STUBS_PER_RUN` | `5` | Max vault stubs created per RAG filler run |
+| `MAX_AUTO_FIXES_PER_DAY` | `3` | Daily limit for autonomous skill improvements |
+| `CHAIN_MAX_BUDGET` | `10.00` | Max budget per chain runner task (USD) |
+| `CHAIN_MAX_HOURS` | `8` | Max duration per chain runner task |
+
+---
+
+## How the Nightly Run Works
 
 ```
   02:00  orchestrator.sh --nightly
-           |
-           +-> dreaming.sh          Analyze today, write playbooks
-           +-> nightly-brain.sh     Prioritize, fill gaps, find patterns
-           |     +-> brain-rag-filler.sh
-           |     +-> learning-loop.sh
-           |     |     +-> session-learner.sh
-           |     |     +-> learning-consolidator.sh
-           |     +-> learning-apply.sh
-           +-> eval-regression.sh   Check for regressions
+           │
+           ├── dreaming.sh           Analyze today's sessions → playbooks
+           ├── nightly-brain.sh      Prioritize learnings, fill gaps
+           │     ├── brain-rag-filler.sh
+           │     ├── learning-loop.sh
+           │     │     ├── session-learner.sh
+           │     │     └── learning-consolidator.sh
+           │     └── learning-apply.sh
+           └── eval-regression.sh    Detect regressions
 
   08:00  orchestrator.sh --weekly (Sundays)
-           |
-           +-> dreaming-local.sh    Deep local analysis (7 days)
-           +-> brain-synapse.sh     Cross-link documents
-           +-> reflect-loop.sh      Find crystallization candidates
-           +-> skill-auto-improve.sh Stage skill improvements
+           │
+           ├── dreaming-local.sh     Deep local analysis (Ollama, 7 days)
+           ├── brain-synapse.sh      Cross-link vault documents
+           ├── reflect-loop.sh       Find crystallization candidates
+           └── skill-auto-improve.sh Stage skill improvements
 ```
+
+---
+
+## Database Schema
+
+Autonomie-OS stores all learning data in PostgreSQL. See [schema.sql](schema.sql) for the full schema.
+
+| Table | Purpose |
+|-------|---------|
+| `learning_items` | Improvement suggestions from all sources |
+| `error_patterns` | Recurring problems with root causes and mitigations |
+| `rag_misses` | Search queries that returned no results |
+| `dreaming_runs` | Audit trail for nightly dreaming sessions |
+| `skill_proposals` | Proposed skill improvements |
+| `skill_decisions` | Judge decisions on proposals |
+| `skill_metrics` | Invocation and success tracking |
+
+---
+
+## Examples
+
+- [First Dreaming Session](examples/first-dreaming-session.md) — What a dreaming cycle produces
+- [Learning Loop Output](examples/learning-loop-output.md) — How raw signals become actions
+- [Eval Regression Report](examples/eval-regression-report.md) — Detecting recurring bugs
+- [Chain Runner Task](examples/task-template.md) — Multi-phase task definition
+
+---
+
+## Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+### Areas where help is needed
+
+- **Additional LLM providers** — Add support for OpenAI, Gemini, Mistral
+- **Alternative databases** — SQLite adapter for simpler setups
+- **Visualization** — Dashboard for learning progress and pattern trends
+- **Integration tests** — More coverage for edge cases
+
+---
 
 ## License
 
-Business Source License 1.1 (BSL 1.1)
+[MIT](LICENSE) — Use it however you want.
 
-- Free for personal, educational, research, and evaluation use
-- Commercial production use requires a Pro license ($49/month)
-- Converts to MIT License on 2030-08-01
+---
 
-See [LICENSE](LICENSE) and [PRICING.md](PRICING.md) for details.
-
-## Built by
-
-[Prompt & Build](https://promptandbuild.de) . Battle-tested across 15+ production apps.
+**Built by [Prompt & Build](https://promptandbuild.de).** Battle-tested across 15+ production apps with 170+ AI agent guards.
