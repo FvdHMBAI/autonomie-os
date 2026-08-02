@@ -1,0 +1,12 @@
+# =============================================================================
+# AUTONOMIE-OS CRON SCHEDULE
+# =============================================================================
+# Add these entries to your crontab (crontab -e)
+# Adjust /path/to/autonomie-os to your installation directory
+# =============================================================================
+
+# Nightly: dreaming + brain + eval (runs ~30-60 min depending on LLM)
+0 2 * * * /path/to/autonomie-os/orchestrator.sh --nightly >> /var/log/autonomie/cron.log 2>&1
+
+# Weekly (Sundays): synapse builder + reflect loop + skill auto-improve
+0 8 * * 0 /path/to/autonomie-os/orchestrator.sh --weekly >> /var/log/autonomie/cron.log 2>&1
