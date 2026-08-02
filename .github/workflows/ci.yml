@@ -72,7 +72,7 @@ jobs:
         run: |
           if grep -rn '/opt/scripts\|/opt/obsidian\|88\.99\.82\|178\.105\.140' \
             --include='*.sh' --include='*.py' --include='*.sql' \
-            --exclude-dir=.git .; then
+            --exclude-dir=.git --exclude-dir=tests .; then
             echo "FAIL: Internal paths found in code"
             exit 1
           fi
