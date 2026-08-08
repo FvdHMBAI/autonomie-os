@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a0a20"/>
+      <stop offset="50%" stop-color="#2d1040"/>
+      <stop offset="100%" stop-color="#0d1117"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f472b6"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="300" fill="url(#bg)"/>
+  <rect x="0" y="296" width="1200" height="4" fill="url(#accent)"/>
+  <g opacity="0.03" stroke="#fff" stroke-width="1">
+    <line x1="0" y1="60" x2="1200" y2="60"/><line x1="0" y1="120" x2="1200" y2="120"/>
+    <line x1="0" y1="180" x2="1200" y2="180"/><line x1="0" y1="240" x2="1200" y2="240"/>
+    <line x1="200" y1="0" x2="200" y2="300"/><line x1="400" y1="0" x2="400" y2="300"/>
+    <line x1="600" y1="0" x2="600" y2="300"/><line x1="800" y1="0" x2="800" y2="300"/>
+    <line x1="1000" y1="0" x2="1000" y2="300"/>
+  </g>
+  <!-- Brain/circuit icon -->
+  <g transform="translate(398, 48)">
+    <ellipse cx="40" cy="38" rx="28" ry="30" fill="none" stroke="#f472b6" stroke-width="2" opacity="0.8"/>
+    <path d="M28 25 Q40 10 52 25" fill="none" stroke="#f472b6" stroke-width="1.5" opacity="0.6"/>
+    <path d="M25 40 Q40 55 55 40" fill="none" stroke="#f472b6" stroke-width="1.5" opacity="0.6"/>
+    <line x1="40" y1="10" x2="40" y2="66" stroke="#f472b6" stroke-width="1" opacity="0.4"/>
+    <line x1="14" y1="38" x2="66" y2="38" stroke="#f472b6" stroke-width="1" opacity="0.4"/>
+    <circle cx="40" cy="38" r="4" fill="#f472b6" opacity="0.9"/>
+    <!-- Neural connections -->
+    <circle cx="28" cy="25" r="2.5" fill="#f472b6" opacity="0.6"/>
+    <circle cx="52" cy="25" r="2.5" fill="#f472b6" opacity="0.6"/>
+    <circle cx="25" cy="50" r="2.5" fill="#f472b6" opacity="0.6"/>
+    <circle cx="55" cy="50" r="2.5" fill="#f472b6" opacity="0.6"/>
+  </g>
+  <text x="490" y="110" font-family="'Segoe UI', system-ui, sans-serif" font-size="52" font-weight="800" fill="#ffffff" letter-spacing="-1">Autonomie-OS</text>
+  <text x="398" y="155" font-family="'Segoe UI', system-ui, sans-serif" font-size="20" fill="#f472b6" font-weight="500">The self-improving AI agent framework</text>
+  <g transform="translate(398, 200)">
+    <rect x="0" y="0" width="200" height="32" rx="16" fill="#f472b6" opacity="0.15"/>
+    <text x="100" y="21" font-family="'Segoe UI', system-ui, sans-serif" font-size="13" fill="#f472b6" font-weight="600" text-anchor="middle">1,048 Autonomous Tasks</text>
+    <rect x="215" y="0" width="170" height="32" rx="16" fill="#f472b6" opacity="0.15"/>
+    <text x="300" y="21" font-family="'Segoe UI', system-ui, sans-serif" font-size="13" fill="#f472b6" font-weight="600" text-anchor="middle">89% Success Rate</text>
+    <rect x="400" y="0" width="155" height="32" rx="16" fill="#f472b6" opacity="0.15"/>
+    <text x="477" y="21" font-family="'Segoe UI', system-ui, sans-serif" font-size="13" fill="#f472b6" font-weight="600" text-anchor="middle">5 Learning Loops</text>
+  </g>
+  <text x="398" y="270" font-family="'Segoe UI', system-ui, sans-serif" font-size="13" fill="#8b949e">Part of AgentStack  |  Open Source  |  MIT License</text>
+</svg>
