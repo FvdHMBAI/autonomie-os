@@ -257,4 +257,13 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 ---
 
-**Built by [Prompt & Build](https://promptandbuild.de).** Battle-tested across 15+ production apps with 170+ AI agent guards.
+---
+
+<p align="center">
+  Built by <a href="https://promptandbuild.de">Prompt & Build</a>.<br>
+  Part of <a href="https://github.com/FvdHMBAI/agent-stack">AgentStack</a>: the complete governance layer for AI agents.
+</p>
+
+<p align="center">
+  If Autonomie-OS helps your agents improve, consider giving it a <a href="https://github.com/FvdHMBAI/autonomie-os">star</a>. It helps others find it.
+</p>
