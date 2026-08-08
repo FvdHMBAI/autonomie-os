@@ -6,7 +6,7 @@
 
 Most AI frameworks help agents *do things*. Autonomie-OS helps agents *become better at doing things*.
 
-It runs overnight, analyzes your agent's sessions, extracts what worked and what didn't, fills knowledge gaps, detects regressions, and proposes its own improvements — all without human intervention.
+It runs overnight, analyzes your agent's sessions, extracts what worked and what didn't, fills knowledge gaps, detects regressions, and proposes its own improvements: all without human intervention.
 
 [![CI](https://github.com/FvdHMBAI/autonomie-os/actions/workflows/ci.yml/badge.svg)](https://github.com/FvdHMBAI/autonomie-os/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -20,7 +20,7 @@ It runs overnight, analyzes your agent's sessions, extracts what worked and what
 | **AutoGPT** | Executes tasks autonomously | Doesn't learn from its mistakes |
 | **LangChain** | Chains LLM calls into workflows | No self-improvement loop |
 | **Devin** | AI software engineer ($500/mo) | Closed source, cloud-only |
-| **Autonomie-OS** | **Learns from every session, improves overnight, runs on your hardware** | — |
+| **Autonomie-OS** | **Learns from every session, improves overnight, runs on your hardware** |: |
 
 The difference between a tool and an organism is that an organism adapts.
 
@@ -62,45 +62,45 @@ The difference between a tool and an organism is that an organism adapts.
 
 ## Modules
 
-### Dreaming — *"What happened today?"*
+### Dreaming: *"What happened today?"*
 
 Runs nightly. Analyzes session logs, detects recurring patterns, writes playbooks for common problems, and proposes new skills when the same pattern occurs 5+ times.
 
 **Input:** Session logs, error patterns, RAG misses, git activity
 **Output:** Playbooks, applied learnings, skill proposals, vault stubs
 
-### Learning — *"What should we remember?"*
+### Learning: *"What should we remember?"*
 
 A four-stage pipeline that turns raw signals into actionable improvements:
 
-1. **Learning Loop** — Converts RAG misses and high-frequency errors into learning items
-2. **Session Learner** — Extracts key findings from session logs
-3. **Consolidator** — Clusters by topic, deduplicates, generates reports
-4. **Learning Apply** — LLM classifies items as guard/memory/vault/config/skip, archives noise
+1. **Learning Loop**: Converts RAG misses and high-frequency errors into learning items
+2. **Session Learner**: Extracts key findings from session logs
+3. **Consolidator**: Clusters by topic, deduplicates, generates reports
+4. **Learning Apply**: LLM classifies items as guard/memory/vault/config/skip, archives noise
 
-### Brain — *"What's missing from our knowledge?"*
+### Brain: *"What's missing from our knowledge?"*
 
 Active knowledge base maintenance:
 
-- **Nightly Brain** — Prioritizes top-5 learnings, finds cross-domain patterns, generates creative ideas
-- **RAG Filler** — Creates documentation stubs for frequently missed search queries
-- **Synapse Builder** — Links thematically related documents using embedding similarity
+- **Nightly Brain**: Prioritizes top-5 learnings, finds cross-domain patterns, generates creative ideas
+- **RAG Filler**: Creates documentation stubs for frequently missed search queries
+- **Synapse Builder**: Links thematically related documents using embedding similarity
 
-### Eval — *"Did we break something?"*
+### Eval: *"Did we break something?"*
 
 Automated quality checks:
 
-- **Regression Detection** — Flags when a new bugfix targets the same repo and symptoms as an older fix
-- **Drift Check** — Deterministic measurement of undocumented API routes and database tables (Python)
+- **Regression Detection**: Flags when a new bugfix targets the same repo and symptoms as an older fix
+- **Drift Check**: Deterministic measurement of undocumented API routes and database tables (Python)
 
-### Skills — *"How can we get better?"*
+### Skills: *"How can we get better?"*
 
 Self-optimization:
 
-- **Skill Auto-Improve** — Collects error patterns, runs LLM triage, stages improvement proposals
-- **Reflect Loop** — Scans learnings for crystallization candidates (Score >= 4 AND Runs >= 3)
+- **Skill Auto-Improve**: Collects error patterns, runs LLM triage, stages improvement proposals
+- **Reflect Loop**: Scans learnings for crystallization candidates (Score >= 4 AND Runs >= 3)
 
-### Chain Runner — *Autonomous multi-phase execution*
+### Chain Runner: *Autonomous multi-phase execution*
 
 Runs complex tasks with safety:
 
@@ -172,15 +172,15 @@ See [examples/first-dreaming-session.md](examples/first-dreaming-session.md) for
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `VAULT_DIR` | `~/vault` | Knowledge base directory (Obsidian, Markdown) |
-| `DB_CONTAINER` | — | Docker container name for PostgreSQL |
+| `DB_CONTAINER` |: | Docker container name for PostgreSQL |
 | `DB_NAME` | `autonomie` | Database name |
-| `ANTHROPIC_API_KEY` | — | Claude API key (primary LLM) |
+| `ANTHROPIC_API_KEY` |: | Claude API key (primary LLM) |
 | `OLLAMA_URL` | `http://localhost:11434` | Ollama endpoint (fallback LLM) |
 | `OLLAMA_MODEL` | `qwen3:8b` | Local model for analysis |
-| `NTFY_URL` | — | Push notification endpoint |
-| `MONITORED_REPOS` | — | Comma-separated repo paths for git analysis |
-| `RAG_INDEX_CMD` | — | Command to rebuild RAG index |
-| `RAG_SEARCH_CMD` | — | Command to search RAG index |
+| `NTFY_URL` |: | Push notification endpoint |
+| `MONITORED_REPOS` |: | Comma-separated repo paths for git analysis |
+| `RAG_INDEX_CMD` |: | Command to rebuild RAG index |
+| `RAG_SEARCH_CMD` |: | Command to search RAG index |
 | `MAX_COST_PER_RUN` | `2.00` | Max API cost per orchestrator run (USD) |
 | `MAX_STUBS_PER_RUN` | `5` | Max vault stubs created per RAG filler run |
 | `MAX_AUTO_FIXES_PER_DAY` | `3` | Daily limit for autonomous skill improvements |
@@ -231,10 +231,10 @@ Autonomie-OS stores all learning data in PostgreSQL. See [schema.sql](schema.sql
 
 ## Examples
 
-- [First Dreaming Session](examples/first-dreaming-session.md) — What a dreaming cycle produces
-- [Learning Loop Output](examples/learning-loop-output.md) — How raw signals become actions
-- [Eval Regression Report](examples/eval-regression-report.md) — Detecting recurring bugs
-- [Chain Runner Task](examples/task-template.md) — Multi-phase task definition
+- [First Dreaming Session](examples/first-dreaming-session.md): What a dreaming cycle produces
+- [Learning Loop Output](examples/learning-loop-output.md): How raw signals become actions
+- [Eval Regression Report](examples/eval-regression-report.md): Detecting recurring bugs
+- [Chain Runner Task](examples/task-template.md): Multi-phase task definition
 
 ---
 
@@ -244,12 +244,31 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 ### Areas where help is needed
 
-- **Additional LLM providers** — Add support for OpenAI, Gemini, Mistral
-- **Alternative databases** — SQLite adapter for simpler setups
-- **Visualization** — Dashboard for learning progress and pattern trends
-- **Integration tests** — More coverage for edge cases
+- **Additional LLM providers**: Add support for OpenAI, Gemini, Mistral
+- **Alternative databases**: SQLite adapter for simpler setups
+- **Visualization**: Dashboard for learning progress and pattern trends
+- **Integration tests**: More coverage for edge cases
 
 ---
+
+## How It Compares
+
+Most AI agent frameworks help agents do things. Autonomie-OS helps agents get better at doing things: automatically, between sessions, without human intervention.
+
+| | Autonomie-OS | LangChain Memory | AutoGPT | BabyAGI | CrewAI |
+|---|---|---|---|---|---|
+| **Learns from sessions** | Yes (nightly extraction) | No | No | No | No |
+| **Self-improving skills** | Yes (crystallization loop) | No | No | No | No |
+| **Overnight analysis** | Yes (dreaming cycle) | No | No | No | No |
+| **Detects regressions** | Yes (eval framework) | No | No | No | No |
+| **Persistent memory** | Vault + PostgreSQL | Vector store | File-based | File-based | Short-term |
+| **Needs human input** | No (autonomous) | No | Yes (goals) | Yes (goals) | Yes (crew config) |
+| **Cross-session context** | Yes (RAG + learnings DB) | Partial (retrieval) | No | No | No |
+| **Multi-agent** | No (single agent focus) | Yes (chains) | Yes | No | Yes (crews) |
+| **Task execution** | Not the focus | Yes | Yes | Yes | Yes |
+| **Dependencies** | bash + PostgreSQL | Python + ML stack | Python + many | Python + many | Python + many |
+
+**They solve different problems.** LangChain, AutoGPT, and CrewAI focus on what agents do during a session. Autonomie-OS focuses on what happens between sessions: extracting learnings, detecting regressions, improving skills. Use them together: CrewAI for task execution, Autonomie-OS for continuous improvement.
 
 ## Part of AgentStack
 
@@ -257,7 +276,7 @@ This tool is free and always will be. For teams that need the full governance st
 
 ## License
 
-[MIT](LICENSE) — Use it however you want.
+[MIT](LICENSE): Use it however you want.
 
 ---
 
