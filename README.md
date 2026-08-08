@@ -13,6 +13,12 @@ It runs overnight, analyzes your agent's sessions, extracts what worked and what
 
 ---
 
+<p align="center">
+  <img src="demo/demo.gif" alt="Autonomie-OS Demo" width="700">
+</p>
+
+---
+
 ## Why Autonomie-OS?
 
 | Framework | What it does | What it doesn't |
