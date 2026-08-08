@@ -1,21 +1,39 @@
 # Autonomie-OS
 
 [![Part of AgentStack](https://img.shields.io/badge/Part%20of-AgentStack-blue?style=flat-square)](https://github.com/FvdHMBAI/agent-stack)
+[![CI](https://github.com/FvdHMBAI/autonomie-os/actions/workflows/ci.yml/badge.svg)](https://github.com/FvdHMBAI/autonomie-os/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 **The self-improving AI agent framework.**
 
+My AI agent used to make the same mistake every Monday. Now it remembers, adapts, and improves. 198 rules it wrote itself. 1,048 tasks completed autonomously. 89% success rate -- without a single line of manual configuration.
+
 Most AI frameworks help agents *do things*. Autonomie-OS helps agents *become better at doing things*.
 
-It runs overnight, analyzes your agent's sessions, extracts what worked and what didn't, fills knowledge gaps, detects regressions, and proposes its own improvements: all without human intervention.
-
-[![CI](https://github.com/FvdHMBAI/autonomie-os/actions/workflows/ci.yml/badge.svg)](https://github.com/FvdHMBAI/autonomie-os/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+It runs overnight, analyzes your agent's sessions, extracts what worked and what didn't, fills knowledge gaps, detects regressions, and proposes its own improvements -- all without human intervention.
 
 ---
 
 <p align="center">
   <img src="demo/demo.gif" alt="Autonomie-OS Demo" width="700">
 </p>
+
+---
+
+## In Production
+
+These are not benchmarks. These are real numbers from a live system running on a single Hetzner server, managing 14 applications across two servers -- 24/7, for months.
+
+| Metric | Value |
+|--------|-------|
+| Crystallized feedback rules | **198** -- written by the agent, not a human |
+| Skills with active learnings | **61** -- each skill tracks what works and what doesn't |
+| Learning entries | **73** -- patterns extracted from real sessions |
+| Memory files | **291** -- persistent cross-session knowledge |
+| Autonomous success rate | **89%** (1,048 / 1,178 tasks) |
+| Infrastructure | Self-hosted, single Hetzner dedicated server |
+
+The agent writes its own rules, learns from its own failures, and gets measurably better every week. No fine-tuning. No retraining. Just structured self-improvement at the framework level.
 
 ---
 
@@ -26,7 +44,7 @@ It runs overnight, analyzes your agent's sessions, extracts what worked and what
 | **AutoGPT** | Executes tasks autonomously | Doesn't learn from its mistakes |
 | **LangChain** | Chains LLM calls into workflows | No self-improvement loop |
 | **Devin** | AI software engineer ($500/mo) | Closed source, cloud-only |
-| **Autonomie-OS** | **Learns from every session, improves overnight, runs on your hardware** |: |
+| **Autonomie-OS** | **Learns from every session, improves overnight, runs on your hardware** | |
 
 The difference between a tool and an organism is that an organism adapts.
 
@@ -36,34 +54,34 @@ The difference between a tool and an organism is that an organism adapts.
 
 ```
                           AUTONOMIE-OS
-    ┌─────────────────────────────────────────────────────────┐
-    │                    ORCHESTRATOR                          │
-    │   Runs modules in dependency order (cron / manual)      │
-    └──────┬──────────┬──────────┬──────────┬────────┬────────┘
-           │          │          │          │        │
-    ┌──────▼──────┐ ┌─▼────────┐ ┌▼────────┐ ┌─────▼──┐ ┌────▼─────┐
-    │  DREAMING   │ │ LEARNING │ │  BRAIN  │ │  EVAL  │ │  SKILLS  │
-    │             │ │          │ │         │ │        │ │          │
-    │ Session     │ │ Loop     │ │ Nightly │ │ Regr.  │ │ Auto-    │
-    │ Analysis    │ │ Session  │ │ RAG     │ │ Check  │ │ Improve  │
-    │ Pattern     │ │ Learner  │ │ Filler  │ │ Drift  │ │ Reflect  │
-    │ Detection   │ │ Consoli- │ │ Synapse │ │ Check  │ │ Loop     │
-    │ Playbook    │ │ dator    │ │ Builder │ │        │ │ Crystal- │
-    │ Writing     │ │ Apply    │ │         │ │        │ │ lization │
-    └──────┬──────┘ └─┬────────┘ └┬────────┘ └───┬────┘ └────┬─────┘
-           │          │           │              │           │
-    ┌──────▼──────────▼───────────▼──────────────▼───────────▼──────┐
-    │                        PostgreSQL                             │
-    │  learning_items │ error_patterns │ rag_misses │ dreaming_runs │
-    │  skill_proposals │ skill_decisions │ skill_metrics             │
-    └──────┬──────────────────────┬─────────────────────────────────┘
-           │                     │
-    ┌──────▼──────┐       ┌──────▼──────┐       ┌──────────────┐
-    │ Vault/Docs  │       │ Notify      │       │ CHAIN RUNNER │
-    │ (Obsidian,  │       │ (ntfy.sh,   │       │ Multi-phase  │
-    │  Markdown)  │       │  webhooks)  │       │ autonomous   │
-    └─────────────┘       └─────────────┘       │ task runner  │
-                                                └──────────────┘
+    +-------------------------------------------------------------+
+    |                    ORCHESTRATOR                              |
+    |   Runs modules in dependency order (cron / manual)          |
+    +------+----------+----------+----------+--------+------------+
+           |          |          |          |        |
+    +------v------+ +-v--------+ +v--------+ +-----v--+ +----v-----+
+    |  DREAMING   | | LEARNING | |  BRAIN  | |  EVAL  | |  SKILLS  |
+    |             | |          | |         | |        | |          |
+    | Session     | | Loop     | | Nightly | | Regr.  | | Auto-    |
+    | Analysis    | | Session  | | RAG     | | Check  | | Improve  |
+    | Pattern     | | Learner  | | Filler  | | Drift  | | Reflect  |
+    | Detection   | | Consoli- | | Synapse | | Check  | | Loop     |
+    | Playbook    | | dator    | | Builder | |        | | Crystal- |
+    | Writing     | | Apply    | |         | |        | | lization |
+    +------+------+ +-+--------+ +-+-------+ +---+----+ +----+-----+
+           |          |           |              |           |
+    +------v----------v-----------v--------------v-----------v------+
+    |                        PostgreSQL                             |
+    |  learning_items | error_patterns | rag_misses | dreaming_runs |
+    |  skill_proposals | skill_decisions | skill_metrics             |
+    +------+----------------------+---------------------+-----------+
+           |                     |                      |
+    +------v------+       +------v------+       +------v-------+
+    | Vault/Docs  |       | Notify      |       | CHAIN RUNNER |
+    | (Obsidian,  |       | (ntfy.sh,   |       | Multi-phase  |
+    |  Markdown)  |       |  webhooks)  |       | autonomous   |
+    +-----------  +       +-------------+       | task runner   |
+                                                +--------------+
 ```
 
 ## Modules
@@ -178,15 +196,15 @@ See [examples/first-dreaming-session.md](examples/first-dreaming-session.md) for
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `VAULT_DIR` | `~/vault` | Knowledge base directory (Obsidian, Markdown) |
-| `DB_CONTAINER` |: | Docker container name for PostgreSQL |
+| `DB_CONTAINER` | | Docker container name for PostgreSQL |
 | `DB_NAME` | `autonomie` | Database name |
-| `ANTHROPIC_API_KEY` |: | Claude API key (primary LLM) |
+| `ANTHROPIC_API_KEY` | | Claude API key (primary LLM) |
 | `OLLAMA_URL` | `http://localhost:11434` | Ollama endpoint (fallback LLM) |
 | `OLLAMA_MODEL` | `qwen3:8b` | Local model for analysis |
-| `NTFY_URL` |: | Push notification endpoint |
-| `MONITORED_REPOS` |: | Comma-separated repo paths for git analysis |
-| `RAG_INDEX_CMD` |: | Command to rebuild RAG index |
-| `RAG_SEARCH_CMD` |: | Command to search RAG index |
+| `NTFY_URL` | | Push notification endpoint |
+| `MONITORED_REPOS` | | Comma-separated repo paths for git analysis |
+| `RAG_INDEX_CMD` | | Command to rebuild RAG index |
+| `RAG_SEARCH_CMD` | | Command to search RAG index |
 | `MAX_COST_PER_RUN` | `2.00` | Max API cost per orchestrator run (USD) |
 | `MAX_STUBS_PER_RUN` | `5` | Max vault stubs created per RAG filler run |
 | `MAX_AUTO_FIXES_PER_DAY` | `3` | Daily limit for autonomous skill improvements |
@@ -199,22 +217,22 @@ See [examples/first-dreaming-session.md](examples/first-dreaming-session.md) for
 
 ```
   02:00  orchestrator.sh --nightly
-           │
-           ├── dreaming.sh           Analyze today's sessions → playbooks
-           ├── nightly-brain.sh      Prioritize learnings, fill gaps
-           │     ├── brain-rag-filler.sh
-           │     ├── learning-loop.sh
-           │     │     ├── session-learner.sh
-           │     │     └── learning-consolidator.sh
-           │     └── learning-apply.sh
-           └── eval-regression.sh    Detect regressions
+           |
+           +-- dreaming.sh           Analyze today's sessions -> playbooks
+           +-- nightly-brain.sh      Prioritize learnings, fill gaps
+           |     +-- brain-rag-filler.sh
+           |     +-- learning-loop.sh
+           |     |     +-- session-learner.sh
+           |     |     +-- learning-consolidator.sh
+           |     +-- learning-apply.sh
+           +-- eval-regression.sh    Detect regressions
 
   08:00  orchestrator.sh --weekly (Sundays)
-           │
-           ├── dreaming-local.sh     Deep local analysis (Ollama, 7 days)
-           ├── brain-synapse.sh      Cross-link vault documents
-           ├── reflect-loop.sh       Find crystallization candidates
-           └── skill-auto-improve.sh Stage skill improvements
+           |
+           +-- dreaming-local.sh     Deep local analysis (Ollama, 7 days)
+           +-- brain-synapse.sh      Cross-link vault documents
+           +-- reflect-loop.sh       Find crystallization candidates
+           +-- skill-auto-improve.sh Stage skill improvements
 ```
 
 ---
@@ -244,22 +262,9 @@ Autonomie-OS stores all learning data in PostgreSQL. See [schema.sql](schema.sql
 
 ---
 
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-### Areas where help is needed
-
-- **Additional LLM providers**: Add support for OpenAI, Gemini, Mistral
-- **Alternative databases**: SQLite adapter for simpler setups
-- **Visualization**: Dashboard for learning progress and pattern trends
-- **Integration tests**: More coverage for edge cases
-
----
-
 ## How It Compares
 
-Most AI agent frameworks help agents do things. Autonomie-OS helps agents get better at doing things: automatically, between sessions, without human intervention.
+Most AI agent frameworks help agents do things. Autonomie-OS helps agents get better at doing things -- automatically, between sessions, without human intervention.
 
 | | Autonomie-OS | LangChain Memory | AutoGPT | BabyAGI | CrewAI |
 |---|---|---|---|---|---|
@@ -276,6 +281,48 @@ Most AI agent frameworks help agents do things. Autonomie-OS helps agents get be
 
 **They solve different problems.** LangChain, AutoGPT, and CrewAI focus on what agents do during a session. Autonomie-OS focuses on what happens between sessions: extracting learnings, detecting regressions, improving skills. Use them together: CrewAI for task execution, Autonomie-OS for continuous improvement.
 
+---
+
+## Ecosystem
+
+Autonomie-OS is the brain. These are the other organs:
+
+| Tool | What it does | Repo |
+|------|-------------|------|
+| **GuardRail** | Hook-based safety layer -- prevents agents from breaking things before they happen | [github.com/FvdHMBAI/guardrail](https://github.com/FvdHMBAI/guardrail) |
+| **Model Router** | Intelligent LLM routing -- picks the right model for each task, optimizes cost | [github.com/FvdHMBAI/model-router](https://github.com/FvdHMBAI/model-router) |
+| **Night Shift** | Automated overnight maintenance -- the cron backbone that runs Autonomie-OS modules | [github.com/FvdHMBAI/nightshift](https://github.com/FvdHMBAI/nightshift) |
+| **Graphify Toolkit** | Codebase-to-knowledge-graph -- turns repos into queryable dependency graphs | [github.com/FvdHMBAI/graphify-toolkit](https://github.com/FvdHMBAI/graphify-toolkit) |
+
+Together, they form [AgentStack](https://github.com/FvdHMBAI/agent-stack): the complete governance layer for AI agents.
+
+---
+
+## Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+### Areas where help is needed
+
+- **Additional LLM providers**: Add support for OpenAI, Gemini, Mistral
+- **Alternative databases**: SQLite adapter for simpler setups
+- **Visualization**: Dashboard for learning progress and pattern trends
+- **Integration tests**: More coverage for edge cases
+
+---
+
+## Built by
+
+**Frederik von der Heyden** -- Solo-Founder at [Prompt & Build](https://promptandbuild.de).
+
+Autonomie-OS is the brain behind his entire AI infrastructure: 14 production applications, two servers, one developer. Every night, it analyzes what the agent did, extracts what it learned, and makes tomorrow's work better than today's.
+
+This is not a weekend project. It is the operating system that runs a real business.
+
+[Learn KI-Governance](https://lernen.promptandbuild.de) | [Newsletter](https://promptandbuild.de)
+
+---
+
 ## Part of AgentStack
 
 This tool is free and always will be. For teams that need the full governance stack (GuardRail Pro + Compliance Shield + priority support), see [AgentStack Pro](https://github.com/FvdHMBAI/agent-stack/blob/main/BUNDLE.md) (EUR 79/dev/month).
@@ -283,8 +330,6 @@ This tool is free and always will be. For teams that need the full governance st
 ## License
 
 [MIT](LICENSE): Use it however you want.
-
----
 
 ---
 
